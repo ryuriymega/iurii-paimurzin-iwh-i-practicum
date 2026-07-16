@@ -1,0 +1,10 @@
+extends layout
+
+block content
+  header.form-header
+    p.eyebrow HubSpot CRM
+    h1 Request not completed
+
+  section.error-section(role="alert")
+    p= message
+    a.button(href="/") Return to the homepage

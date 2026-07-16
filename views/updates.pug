@@ -1,0 +1,35 @@
+extends layout
+
+block content
+  header.form-header
+    a.back-link(href="/") Return to the homepage
+    p.eyebrow HubSpot CRM
+    h1 Add an AI Agent
+    p.subtitle Create a new custom object record.
+
+  section.form-section(aria-labelledby="form-heading")
+    h2#form-heading Agent details
+
+    if errors.length
+      .error-summary(role="alert" aria-labelledby="error-heading")
+        h3#error-heading Check the form
+        ul
+          each error in errors
+            li= error
+
+    form(method="post" action="/update-cobj")
+      .field
+        label(for="name") Name
+        input#name(type="text" name="name" value=values.name required maxlength="100" autocomplete="off")
+
+      .field
+        label(for="role") Role
+        input#role(type="text" name="role" value=values.role required maxlength="200" autocomplete="off")
+
+      .field
+        label(for="terminal_controller_url") Terminal Controller URL
+        input#terminal_controller_url(type="url" name="terminal_controller_url" value=values.terminal_controller_url required maxlength="500" placeholder="https://example.com/agent")
+
+      .form-actions
+        button.button(type="submit") Add agent
+        a.secondary-link(href="/") Cancel

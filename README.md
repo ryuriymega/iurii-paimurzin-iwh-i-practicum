@@ -1,28 +1,61 @@
-# Welcome to the Integrating With HubSpot I: Foundations Practicum
+# Integrating With HubSpot I: Foundations Practicum
 
-This repository is for the Integrating With HubSpot I: Foundations course. This practicum is one of two requirements for receiving your Integrating With HubSpot I: Foundations certification. You must also take the exam and receive a passing grade (at least 75%).
+This is Iurii Paimurzin's Node application for the HubSpot Academy Integrating With HubSpot I: Foundations practicum. It uses Express, Axios, Pug, and the HubSpot CRM API to list and create AI Agent custom object records.
 
-To read the full directions, please go to the [practicum instructions](https://app.hubspot.com/academy/l/tracks/1092124/1093824/5493?language=en).
+## HubSpot Custom Object
 
-**Put your HubSpot developer test account custom objects URL link here:** https://app.hubspot.com/contacts/l/objects/${custom-obj-number}/views/all/list
+[Open the AI Agents custom object list in the developer test account](https://app.hubspot.com/contacts/246566165/objects/2-232580683/views/all/list)
 
-___
-## Tips:
-- Commit to your repository often. Even if you make small tweaks to your code, it’s best to be committing to your repository frequently.
-- The subject of the custom object is up to you. Feel free to get creative!
-- Please create a test account and include your private app access token in your repo.
-- Ensure you re-merge any working branches into the main branch.
-- DO NOT ADD YOUR PRIVATE APP TOKEN TO YOUR REPOSITORY. 
+The custom object has object type ID `2-232580683` and is associated with contacts.
 
-## Pre-requisites:
-- Using [Node](https://nodejs.org/en/download) and node packages
-- Using [Express](https://expressjs.com/en/starter/installing.html)
-- Using [Axios](https://axios-http.com/docs/intro)
-- Using [Pug templating system](https://pugjs.org/api/getting-started.html)
-- Using the command line
-- Using [Git and GitHub](https://product.hubspot.com/blog/git-and-github-tutorial-for-beginners)
+| Property | Internal name | Type |
+| --- | --- | --- |
+| Name | `name` | String |
+| Role | `role` | String |
+| Terminal Controller URL | `terminal_controller_url` | String |
 
-## Requirements
-- All work must be your own. During the grading process we will check the revision history. Submissions that do not meet this requirement will not be considered.
-- You must have at least two new routes in your index.js file and one new pug template for the homepage.
-- You must create a developer test account and link to it in your README.md file. Submissions that do not meet this requirement will not be considered.
+The test account contains at least three AI Agent records. One record is associated with the sample contact Maria Johnson.
+
+## Private App
+
+The developer test account contains the private app `Iurii's Practicum Private App` with these required scopes:
+
+- `crm.schemas.custom.read`
+- `crm.schemas.custom.write`
+- `crm.objects.custom.read`
+- `crm.objects.custom.write`
+- `crm.objects.contacts.read`
+- `crm.objects.contacts.write`
+
+No private app access token is stored in this repository.
+
+## Local Setup
+
+Use Node.js 18 or newer.
+
+```bash
+npm install
+cp .env.example .env
+```
+
+Set the private app access token in `.env`, then start the application:
+
+```bash
+npm start
+```
+
+Open `http://localhost:3000` unless `PORT` is set to another value.
+
+## Routes
+
+| Method | Route | Purpose |
+| --- | --- | --- |
+| GET | `/` | Retrieves AI Agent records from HubSpot and renders the homepage table |
+| GET | `/update-cobj` | Renders the custom object creation form |
+| POST | `/update-cobj` | Creates an AI Agent record and redirects to the homepage |
+
+Run the local route and validation checks with:
+
+```bash
+npm test
+```
