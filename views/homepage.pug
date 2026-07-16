@@ -1,0 +1,35 @@
+extends layout
+
+block content
+  header.page-header
+    div
+      p.eyebrow HubSpot CRM
+      h1 AI Agents
+      p.subtitle Custom object records from the developer test account.
+    a.button(href="/update-cobj") Add to this table
+
+  section.table-section(aria-labelledby="records-heading")
+    .table-heading
+      h2#records-heading Agent records
+      p.record-count #{records.length} #{records.length === 1 ? 'record' : 'records'}
+
+    if records.length
+      .table-wrap
+        table
+          thead
+            tr
+              th(scope="col") Name
+              th(scope="col") Role
+              th(scope="col") Terminal Controller URL
+          tbody
+            each record in records
+              tr
+                td(data-label="Name")= record.properties.name || 'Not provided'
+                td(data-label="Role")= record.properties.role || 'Not provided'
+                td(data-label="Terminal Controller URL")
+                  if record.properties.terminal_controller_url
+                    a.external-link(href=record.properties.terminal_controller_url target="_blank" rel="noreferrer")= record.properties.terminal_controller_url
+                  else
+                    | Not provided
+    else
+      p.empty-state No AI agent records found.
