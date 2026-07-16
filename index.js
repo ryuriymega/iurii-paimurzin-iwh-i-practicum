@@ -86,6 +86,29 @@ app.post('/update-cobj', async (req, res, next) => {
   }
 });
 
+app.use((error, req, res, next) => {
+  if (res.headersSent) return next(error);
+
+  const hubspotStatus = error.response?.status;
+  const correlationId = error.response?.data?.correlationId;
+  console.error('HubSpot request failed', {
+    status: hubspotStatus || 'unknown',
+    correlationId: correlationId || 'unavailable',
+  });
+
+  let message = 'The HubSpot request could not be completed. Please try again.';
+  if (!process.env.HUBSPOT_ACCESS_TOKEN || hubspotStatus === 401) {
+    message = 'HubSpot authentication failed. Check the private app access token in your local environment.';
+  } else if (hubspotStatus === 403) {
+    message = 'The private app does not have permission to complete this HubSpot request.';
+  }
+
+  return res.status(500).render('error', {
+    title: 'Request Error | Integrating With HubSpot I Practicum',
+    message,
+  });
+});
+
 if (require.main === module) {
   app.listen(port, () => console.log(`Listening on http://localhost:${port}`));
 }
