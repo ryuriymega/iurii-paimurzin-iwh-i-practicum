@@ -41,7 +41,50 @@ app.get('/', async (req, res, next) => {
   }
 });
 
-// The form GET and POST routes are added in the next milestone.
+app.get('/update-cobj', (req, res) => {
+  res.render('updates', {
+    title: 'Update Custom Object Form | Integrating With HubSpot I Practicum',
+    errors: [],
+    values: {},
+  });
+});
+
+app.post('/update-cobj', async (req, res, next) => {
+  const values = {
+    name: String(req.body.name || '').trim(),
+    role: String(req.body.role || '').trim(),
+    terminal_controller_url: String(req.body.terminal_controller_url || '').trim(),
+  };
+  const errors = [];
+
+  if (!values.name) errors.push('Name is required.');
+  if (!values.role) errors.push('Role is required.');
+  if (!values.terminal_controller_url) {
+    errors.push('Terminal Controller URL is required.');
+  } else {
+    try {
+      const url = new URL(values.terminal_controller_url);
+      if (url.protocol !== 'https:') errors.push('Terminal Controller URL must use HTTPS.');
+    } catch {
+      errors.push('Terminal Controller URL must be a valid URL.');
+    }
+  }
+
+  if (errors.length) {
+    return res.status(400).render('updates', {
+      title: 'Update Custom Object Form | Integrating With HubSpot I Practicum',
+      errors,
+      values,
+    });
+  }
+
+  try {
+    await hubspot.post('', { properties: values });
+    return res.redirect(303, '/');
+  } catch (error) {
+    return next(error);
+  }
+});
 
 if (require.main === module) {
   app.listen(port, () => console.log(`Listening on http://localhost:${port}`));
